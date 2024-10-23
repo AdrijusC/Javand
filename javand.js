@@ -1,7 +1,5 @@
 const currentYear = new Date().getFullYear();
 
-console.log(currentYear)
-
 const inventory = [
     {
         "category": "Informacinės technologijos",
@@ -230,40 +228,90 @@ const inventory = [
     }
 ];
 
-function listAndIdentify() {
-    for (let category of inventory) {
-        console.log("Category:" + category.category);
+// function listAndIdentify() {
+//     for (let category of inventory) {
+//         console.log("Category:" + category.category);
 
-      for (let book of category.books) {
-           let isNewBook = "";
+//       for (let book of category.books) {
+//            let isNewBook = "";
 
-            if (book.publishing_year === currentYear) {
-                isNewBook = "(New book)";
-            }
+//             if (book.publishing_year === currentYear) {
+//                 isNewBook = "(New book)";
+//             }
 
-            console.log("-" + book.title + ", ISBN: " + book.ISBN + ", Year" + book.publishing_year + isNewBook + ", Pages:" + book.pages + ", Quantity:" + book.quantity + ", Prie: " + book.price + " EUR");
-        }
+//             console.log("-" + book.title + ", ISBN: " + book.ISBN + ", Year" + book.publishing_year + isNewBook + ", Pages:" + book.pages + ", Quantity:" + book.quantity + ", Prie: " + book.price + " EUR");
+//         }
+//     }
+// }
+
+// listAndIdentify()
+
+// function calculateTotal() {
+//     let overallTotalValue = 0;
+
+//     for (let category of inventory) {
+//         let = categoryTotalValue = 0;
+
+//         for (let book of category.books) {
+//             const bookTotalValue = book.price * book.quantity;
+//             categoryTotalValue += bookTotalValue;
+//         }
+
+//         console.log(`Total value for ${category.category}: ${categoryTotalValue} EUR`);
+//         overallTotalValue += categoryTotalValue;
+//     }
+
+//     console.log (`Overall inventory value: ${overallTotalValue} EUR`)
+// }
+
+// calculateTotal()
+
+// function filterProdcutsByCategory (products, category){
+//     return products.filter(product=> product.category === category)
+// }
+// const filteredCategories = filterProdcutsByCategory(products, "Clothing")
+
+// console.log(filteredCategories);
+
+function sortBooks(category){
+    const categoryObject = inventory.find(item => item.category === category);
+    if (categoryObject){
+        return categoryObject.books.sort((a,b) => {
+            if (a.author > b.author) return 1;
+            if (a.author < b.author) return -1;
+            if (a.price > b.price) return 1;
+            if (a.price < b.price) return -1;
+            if (a.title > b.title) return 1;
+            if (a.title < b.title) return -1;
+            return 0;
+        });
     }
+    return [];
 }
 
-listAndIdentify()
+console.log(sortBooks("Fantastika"));
 
-function calculateTotal() {
-    let overallTotalValue = 0;
+function findMinPrice() {
+    const prices = inventory.flatMap(category => category.books.map(book => book.price));
+    return Math.min(...prices);
+  }
 
-    for (let category of inventory) {
-        let = categoryTotalValue = 0;
+console.log(findMinPrice())
 
-        for (let book of category.books) {
-            const bookTotalValue = book.price * book.quantity;
-            categoryTotalValue += bookTotalValue;
-        }
+  function findMaxPrice(){
+    const prices = inventory.flatMap(category => category.books.map(book => book.price));
+    return Math.max(...prices);
+  }
 
-        console.log(`Total value for ${category.category}: ${categoryTotalValue} EUR`);
-        overallTotalValue += categoryTotalValue;
+console.log(findMaxPrice())
+
+  function filterBooks(category, title = "", minPages = 0){
+    const categoryObject = inventory.find(item => item.category === category);
+    if (categoryObject){
+        return categoryObject.books.filter(book => book.title.includes(title) && book.pages >= minPages)
     }
-
-    console.log (`Overall inventory value: ${overallTotalValue} EUR`)
+    return 0;
 }
 
-calculateTotal()
+console.log(filterBooks("Fantastika", "The Last Jedi", 900));
+
